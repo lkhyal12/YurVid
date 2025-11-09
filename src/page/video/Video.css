@@ -1,12 +1,13 @@
-.videoPlayer {
-  flex-basis: 69%;
-}
 .videoContainer {
   padding: 20px 2%;
   background-color: #f9f9f9;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 20px;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+}
+.videoPlayer {
+  flex-basis: 69%;
 }
 .videoPlayer video {
   width: 100%;

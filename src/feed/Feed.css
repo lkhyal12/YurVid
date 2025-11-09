@@ -5,9 +5,17 @@
   grid-row-gap: 30px;
   margin-top: 15px;
 }
+.feed .card {
+  overflow: hidden;
+}
 .feed .card img {
   width: 100%;
   border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.feed .card img:hover {
+  scale: 1.1;
 }
 .card h2 {
   font-size: 16px;
