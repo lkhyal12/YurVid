@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import thumbnail1 from "../assets/thumbnail1.png";
 import thumbnail2 from "../assets/thumbnail2.png";
 import thumbnail3 from "../assets/thumbnail3.png";
@@ -8,6 +8,9 @@ import thumbnail6 from "../assets/thumbnail6.png";
 import thumbnail7 from "../assets/thumbnail7.png";
 import thumbnail8 from "../assets/thumbnail8.png";
 import "./Feed.css";
+import { Link } from "react-router-dom";
+import { abbreviateNumber } from "../utils";
+import moment from "moment";
 const cardsData = [
   {
     image: thumbnail1,
@@ -66,19 +69,39 @@ const cardsData = [
     date: "2days ago",
   },
 ];
-const Feed = () => {
+const Feed = ({ category }) => {
+  console.log({ category });
+
+  const [videosData, setVideosData] = useState([]);
+  useEffect(() => {
+    const apiKey = import.meta.env.VITE_YT_API_KEY;
+    async function fetchData() {
+      const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=US&videoCategoryId=${category}&key=${apiKey}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+      setVideosData(data.items);
+    }
+    fetchData();
+  }, [category]);
   return (
     <div className="feed">
-      {cardsData.map((card) => (
-        <div className="card">
-          <img src={card.image} alt="" />
-          <h2>{card.title}</h2>
-          <h3> {card.channelName}</h3>
-          <p>
-            {card.views} &bull; {card.date}
-          </p>
-        </div>
-      ))}
+      {videosData.length > 0 &&
+        videosData.map((item) => (
+          <Link
+            key={item.id}
+            to={`/video/${item.snippet.categoryId}/${item.id}`}
+            className="card"
+          >
+            <img src={item.snippet.thumbnails.medium.url} alt="" />
+            <h2>{item.snippet.title}</h2>
+            <h3> {item.snippet.channelTitle}</h3>
+            <p>
+              {abbreviateNumber(item.statistics.viewCount)} Views &bull;{" "}
+              {moment(item.snippet.publishedAt).fromNow()}
+            </p>
+          </Link>
+        ))}
     </div>
   );
 };

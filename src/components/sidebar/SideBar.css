@@ -43,6 +43,10 @@
   width: 25px;
   border-radius: 50%;
 }
+.shortcut-links .side-link.active img {
+  border-bottom: 3px red solid;
+  padding-bottom: 2px;
+}
 .subscribed-list .side-link p {
   font-size: 15px;
 }
